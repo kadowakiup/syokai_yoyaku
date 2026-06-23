@@ -1,0 +1,168 @@
+@charset "UTF-8";
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans", sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+.kousintyu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #01b6ff;
+  font-weight: 600;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  padding: 20px 0;
+  background-color: #fff;
+  margin: 0 0 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+/* カレンダー周り */
+.week-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px 15px;
+  font-weight: bold;
+}
+
+.nav-btn {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.nav-btn:disabled {
+  color: #ccc;
+}
+
+.calendar-grid {
+  display: flex;
+  overflow-x: auto;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+.calendar-col {
+  min-width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-header {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.slot {
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 8px;
+  text-align: center;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+}
+
+.slot.available {
+  background-color: #e0f7fa;
+  color: #00838f;
+  cursor: pointer;
+}
+
+.slot.full {
+  background-color: #eee;
+  color: #aaa;
+}
+
+.slot.empty {
+  background: none;
+  color: #ccc;
+  font-size: 12px;
+}
+
+/* フォーム・確認画面周り */
+.form-container, .confirm-container {
+  padding: 0 20px;
+}
+
+.form-group, .applicant-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.readonly-group input {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.add-btn {
+  background: none;
+  border: 1px dashed #01b6ff;
+  color: #01b6ff;
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+/* ボタン共通 */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.submit-btn {
+  background-color: #01b6ff;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.back-btn {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 14px;
+  border-radius: 4px;
+  font-weight: bold;
+}/*# sourceMappingURL=style.css.map */
