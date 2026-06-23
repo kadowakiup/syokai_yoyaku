@@ -97,7 +97,7 @@ function renderCalendar() {
     const col = document.createElement("div");
     col.className = "calendar-col";
 
-    // ★修正：日付と曜日を別々のspanタグにしてデザインしやすく変更
+    // 日付と曜日を1行で表示するよう修正
     const header = document.createElement("div");
     header.className = "calendar-header";
     
@@ -109,7 +109,7 @@ function renderCalendar() {
     dayNameSpan.className = "day-name";
     dayNameSpan.textContent = `(${weekNames[targetDate.getDay()]})`;
 
-    // 土日の曜日の色付け（CSSクラスでも制御可能ですが、一旦ここで簡易設定）
+    // 土日の曜日の色付け
     if (targetDate.getDay() === 0) {
       dayNameSpan.classList.add("sun");
     } else if (targetDate.getDay() === 6) {
@@ -117,8 +117,7 @@ function renderCalendar() {
     }
 
     header.appendChild(dayNumSpan);
-    header.appendChild(document.createElement("br"));
-    header.appendChild(dayNameSpan);
+    header.appendChild(dayNameSpan); // 改行を挟まずにそのまま横に並べる
     col.appendChild(header);
 
     // 各時間の枠生成

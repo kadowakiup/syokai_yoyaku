@@ -49,33 +49,34 @@ body {
   color: #ccc;
 }
 
-/* カレンダーのヘッダー（日付・曜日）の修正 */
+/* カレンダーのヘッダー（日付・曜日を1行で表示） */
 .calendar-header {
   text-align: center;
   margin-bottom: 12px;
-  line-height: 1.4;
+  white-space: nowrap;   /* 画面幅によって途中で自動改行されるのを防ぐ */
 }
 
 /* 日付（◯日）の数字部分 */
 .calendar-header .day-num {
-  font-size: 13px;       /* 文字サイズを少し小さく調整 */
-  font-weight: 600;      /* 数字は適度に太字 */
+  font-size: 12px;       /* 横並びにするため少しコンパクトに */
+  font-weight: 600;      
   color: #333;
 }
 
 /* 曜日（ (月) など ）のテキスト部分 */
 .calendar-header .day-name {
-  font-size: 10px;       /* 曜日を小さくして主張を抑える */
-  color: #999;           /* 文字の色を薄いグレーに */
-  font-weight: normal;   /* 太字を解除 */
+  font-size: 11px;       
+  color: #999;           
+  font-weight: normal;   
+  margin-left: 2px;      /* ★ 日付と曜日の間に少しだけ隙間を空ける */
 }
 
-/* 土曜日の曜日の色（薄めの青） */
+/* 土曜日の曜日の色 */
 .calendar-header .day-name.sat {
   color: #6bbdff;
 }
 
-/* 日曜日の曜日の色（薄めの赤） */
+/* 日曜日の曜日の色 */
 .calendar-header .day-name.sun {
   color: #ff8cae;
 }
