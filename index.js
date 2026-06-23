@@ -14,7 +14,7 @@ const TIME_SLOTS = [
 
 let bookedSlots = {}; // 予約済みの枠
 let introducerName = ""; // 紹介者名
-let currentStartDate = new Date(); // カレンダー表示の起点（常に月曜日になるよう制御）
+let currentStartDate = new Date(); // カレンダー表示の起点
 let selectedSlot = null; // 選択された予約枠
 
 window.onload = async function () {
@@ -50,11 +50,9 @@ async function fetchReservationData(idToken) {
   introducerName = data.introducer || "不明";
   bookedSlots = data.bookedSlots || {};
   
-  // ★修正：常に「今週の月曜日」の00:00を起点にする
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const currentDay = today.getDay(); // 0:日, 1:月, ..., 6:土
-  // 日曜日(0)なら6日前、それ以外なら (曜日の数値 - 1) 日前が月曜日
+  const currentDay = today.getDay(); 
   const diff = today.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
   currentStartDate = new Date(today.setDate(diff));
   
@@ -67,13 +65,11 @@ function renderCalendar() {
 
   const today = new Date(); 
 
-  // 表示期間のラベル（月〜日）
   const endDate = new Date(currentStartDate);
   endDate.setDate(endDate.getDate() + 6);
   document.getElementById("current-week-label").textContent = 
     `${currentStartDate.getMonth()+1}/${currentStartDate.getDate()} 〜 ${endDate.getMonth()+1}/${endDate.getDate()}分`;
 
-  // ★修正：今週の月曜日より前の週には戻れないようにする
   const todayObj = new Date();
   todayObj.setHours(0, 0, 0, 0);
   const currentDay = todayObj.getDay();
@@ -84,7 +80,6 @@ function renderCalendar() {
 
   const weekNames = ["日", "月", "火", "水", "木", "金", "土"];
 
-  // 月曜日から日曜日までの7日分をループ
   for (let i = 0; i < 7; i++) {
     const targetDate = new Date(currentStartDate);
     targetDate.setDate(targetDate.getDate() + i);
@@ -97,7 +92,6 @@ function renderCalendar() {
     const col = document.createElement("div");
     col.className = "calendar-col";
 
-    // 日付と曜日を1行で表示するよう修正
     const header = document.createElement("div");
     header.className = "calendar-header";
     
@@ -109,7 +103,6 @@ function renderCalendar() {
     dayNameSpan.className = "day-name";
     dayNameSpan.textContent = `(${weekNames[targetDate.getDay()]})`;
 
-    // 土日の曜日の色付け
     if (targetDate.getDay() === 0) {
       dayNameSpan.classList.add("sun");
     } else if (targetDate.getDay() === 6) {
@@ -117,10 +110,9 @@ function renderCalendar() {
     }
 
     header.appendChild(dayNumSpan);
-    header.appendChild(dayNameSpan); // 改行を挟まずにそのまま横に並べる
+    header.appendChild(dayNameSpan); 
     col.appendChild(header);
 
-    // 各時間の枠生成
     TIME_SLOTS.forEach(time => {
       const [hours, minutes] = time.split(":");
       const slotDt = new Date(year, targetDate.getMonth(), targetDate.getDate(), Number(hours), Number(minutes), 0);
@@ -155,57 +147,119 @@ function openForm(slot) {
   
   const container = document.getElementById("applicants-container");
   container.innerHTML = "";
+  applicantCount = 0; // カウントリセット
   addApplicantField();
 
   switchView("view-form");
 }
 
+// ★修正：応募者の入力欄を「姓・名・セイ・メイ」の4点項目に生成
 let applicantCount = 0;
 function addApplicantField() {
   applicantCount++;
   const container = document.getElementById("applicants-container");
-  const div = document.createElement("div");
-  div.className = "applicant-group";
-  div.innerHTML = `
-    <label>応募者 ${applicantCount} 氏名</label>
-    <input type="text" class="input-applicant" placeholder="山田 太郎" required>
+  
+  const block = document.createElement("div");
+  block.className = "applicant-block";
+  block.style.borderBottom = "1px dashed #ccc";
+  block.style.paddingBottom = "15px";
+  block.style.marginBottom = "15px";
+  
+  block.innerHTML = `
+    <h3 style="font-size: 14px; margin-bottom: 10px; color: #01b6ff;">応募者 ${applicantCount}</h3>
+    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+      <div style="flex: 1;">
+        <label style="font-size: 12px;">姓</label>
+        <input type="text" class="input-last-name" placeholder="山田" required style="padding: 8px;">
+      </div>
+      <div style="flex: 1;">
+        <label style="font-size: 12px;">名</label>
+        <input type="text" class="input-first-name" placeholder="太郎" required style="padding: 8px;">
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <div style="flex: 1;">
+        <label style="font-size: 12px;">セイ</label>
+        <input type="text" class="input-last-kana" placeholder="ヤマダ" required style="padding: 8px;">
+      </div>
+      <div style="flex: 1;">
+        <label style="font-size: 12px;">メイ</label>
+        <input type="text" class="input-first-kana" placeholder="タロウ" required style="padding: 8px;">
+      </div>
+    </div>
   `;
-  container.appendChild(div);
+  container.appendChild(block);
 }
 
+// ★修正：確認画面の生成（4点セットのデータを取得・表示）
 function showConfirm() {
-  const applicants = Array.from(document.querySelectorAll(".input-applicant"))
-                          .map(input => input.value.trim())
-                          .filter(val => val !== "");
+  const blocks = document.querySelectorAll(".applicant-block");
+  const applicants = [];
+  let hasError = false;
 
-  if (applicants.length === 0) {
-    alert("応募者の氏名を入力してください。");
+  blocks.forEach((block) => {
+    const lastName = block.querySelector(".input-last-name").value.trim();
+    const firstName = block.querySelector(".input-first-name").value.trim();
+    const lastKana = block.querySelector(".input-last-kana").value.trim();
+    const firstKana = block.querySelector(".input-first-kana").value.trim();
+
+    // 1つでも空欄があればエラー判定（ただし全員未入力は別途チェック）
+    if (!lastName || !firstName || !lastKana || !firstKana) {
+      hasError = true;
+      return;
+    }
+
+    applicants.push({
+      lastName: lastName,
+      firstName: firstName,
+      lastKana: lastKana,
+      firstKana: firstKana
+    });
+  });
+
+  if (hasError || applicants.length === 0) {
+    alert("すべての応募者の「姓」「名」「セイ」「メイ」を入力してください。");
     return;
   }
 
+  // 確認画面のHTML組み立て
   let html = `
     <p><strong>予約日時:</strong><br> ${selectedSlot.date} ${selectedSlot.time}</p>
     <p><strong>紹介者:</strong><br> ${introducerName}</p>
-    <p><strong>応募者:</strong></p>
-    <ul>
+    <p><strong>応募者情報:</strong></p>
   `;
-  applicants.forEach(name => {
-    html += `<li>${name}</li>`;
+  
+  applicants.forEach((app, index) => {
+    html += `
+      <div style="margin-bottom: 10px; padding-left: 10px; border-left: 2px solid #01b6ff;">
+        <p style="margin: 0; font-size: 12px; color: #666;">応募者 ${index + 1}</p>
+        <p style="margin: 2px 0 0 0;"><strong>氏名:</strong> ${app.lastName} ${app.firstName} （${app.lastKana} ${app.firstKana}）</p>
+      </div>
+    `;
   });
-  html += `</ul>`;
 
   document.getElementById("confirm-details").innerHTML = html;
   switchView("view-confirm");
 }
 
+// ★修正：Anycrossへ提出（4点セットを配列データとして送信）
 async function submitReservation() {
   showLoading("予約を確定しています...");
   try {
     const idToken = liff.getIDToken();
     const profile = await liff.getProfile();
-    const applicants = Array.from(document.querySelectorAll(".input-applicant"))
-                            .map(input => input.value.trim())
-                            .filter(val => val !== "");
+    
+    const blocks = document.querySelectorAll(".applicant-block");
+    const applicants = [];
+
+    blocks.forEach((block) => {
+      applicants.push({
+        lastName: block.querySelector(".input-last-name").value.trim(),
+        firstName: block.querySelector(".input-first-name").value.trim(),
+        lastKana: block.querySelector(".input-last-kana").value.trim(),
+        firstKana: block.querySelector(".input-first-kana").value.trim()
+      });
+    });
 
     const payload = {
       action: "submitReservation",
@@ -214,7 +268,7 @@ async function submitReservation() {
       date: selectedSlot.date,
       time: selectedSlot.time,
       introducer: introducerName,
-      applicants: applicants
+      applicants: applicants // { lastName, firstName, lastKana, firstKana } の配列
     };
 
     const res = await fetch(GAS_URL, {
