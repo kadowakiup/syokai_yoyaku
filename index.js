@@ -12,9 +12,9 @@ const TIME_SLOTS = [
   "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45"
 ];
 
-let bookedSlots = {}; // 予約済みの枠（GASから取得）
-let introducerName = ""; // 紹介者名（GASから取得）
-let currentStartDate = new Date(); // カレンダー表示の起点（今日）
+let bookedSlots = {}; // 予約済みの枠
+let introducerName = ""; // 紹介者名
+let currentStartDate = new Date(); // カレンダー表示の起点（常に月曜日になるよう制御）
 let selectedSlot = null; // 選択された予約枠
 
 window.onload = async function () {
@@ -48,10 +48,15 @@ async function fetchReservationData(idToken) {
   if (!data.success) throw new Error(data.message || "データ取得失敗");
 
   introducerName = data.introducer || "不明";
-  bookedSlots = data.bookedSlots || {}; // { "2026-06-25_17:15": true } のような形式
+  bookedSlots = data.bookedSlots || {};
   
-  currentStartDate = new Date();
-  currentStartDate.setHours(0, 0, 0, 0);
+  // ★修正：常に「今週の月曜日」の00:00を起点にする
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const currentDay = today.getDay(); // 0:日, 1:月, ..., 6:土
+  // 日曜日(0)なら6日前、それ以外なら (曜日の数値 - 1) 日前が月曜日
+  const diff = today.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+  currentStartDate = new Date(today.setDate(diff));
   
   renderCalendar();
 }
@@ -60,20 +65,26 @@ function renderCalendar() {
   const grid = document.getElementById("calendar-grid");
   grid.innerHTML = "";
 
-  const today = new Date(); // 現在時刻（過去の時間を予約不可にするため）
+  const today = new Date(); 
 
+  // 表示期間のラベル（月〜日）
   const endDate = new Date(currentStartDate);
   endDate.setDate(endDate.getDate() + 6);
   document.getElementById("current-week-label").textContent = 
-    `${currentStartDate.getMonth()+1}/${currentStartDate.getDate()} 〜 ${endDate.getMonth()+1}/${endDate.getDate()}`;
+    `${currentStartDate.getMonth()+1}/${currentStartDate.getDate()} 〜 ${endDate.getMonth()+1}/${endDate.getDate()}分`;
 
-  // 今日より前の週には戻れないようにする
-  const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  document.getElementById("btn-prev-week").disabled = currentStartDate <= todayZero;
+  // ★修正：今週の月曜日より前の週には戻れないようにする
+  const todayObj = new Date();
+  todayObj.setHours(0, 0, 0, 0);
+  const currentDay = todayObj.getDay();
+  const diff = todayObj.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+  const thisWeekMonday = new Date(todayObj.setDate(diff));
+  
+  document.getElementById("btn-prev-week").disabled = currentStartDate <= thisWeekMonday;
 
   const weekNames = ["日", "月", "火", "水", "木", "金", "土"];
 
-  // 7日分の列を作成
+  // 月曜日から日曜日までの7日分をループ
   for (let i = 0; i < 7; i++) {
     const targetDate = new Date(currentStartDate);
     targetDate.setDate(targetDate.getDate() + i);
@@ -81,28 +92,42 @@ function renderCalendar() {
     const year = targetDate.getFullYear();
     const month = String(targetDate.getMonth() + 1).padStart(2, "0");
     const dateNum = String(targetDate.getDate()).padStart(2, "0");
-    const dateStr = `${year}-${month}-${dateNum}`; // 例: 2026-06-23
+    const dateStr = `${year}-${month}-${dateNum}`;
 
     const col = document.createElement("div");
     col.className = "calendar-col";
 
+    // ★修正：日付と曜日を別々のspanタグにしてデザインしやすく変更
     const header = document.createElement("div");
     header.className = "calendar-header";
-    header.innerHTML = `${targetDate.getDate()}日<br>(${weekNames[targetDate.getDay()]})`;
+    
+    const dayNumSpan = document.createElement("span");
+    dayNumSpan.className = "day-num";
+    dayNumSpan.textContent = `${targetDate.getDate()}日`;
+
+    const dayNameSpan = document.createElement("span");
+    dayNameSpan.className = "day-name";
+    dayNameSpan.textContent = `(${weekNames[targetDate.getDay()]})`;
+
+    // 土日の曜日の色付け（CSSクラスでも制御可能ですが、一旦ここで簡易設定）
+    if (targetDate.getDay() === 0) {
+      dayNameSpan.classList.add("sun");
+    } else if (targetDate.getDay() === 6) {
+      dayNameSpan.classList.add("sat");
+    }
+
+    header.appendChild(dayNumSpan);
+    header.appendChild(document.createElement("br"));
+    header.appendChild(dayNameSpan);
     col.appendChild(header);
 
-    // TIME_SLOTS に基づいて全ての枠を生成
+    // 各時間の枠生成
     TIME_SLOTS.forEach(time => {
-      // iOSのブラウザバグを防ぐため、文字列ではなく数値でDateを生成
       const [hours, minutes] = time.split(":");
       const slotDt = new Date(year, targetDate.getMonth(), targetDate.getDate(), Number(hours), Number(minutes), 0);
       
       const isPast = slotDt < today; 
-      
-      // GAS側から送られてきたデータとキー（2026-06-23_18:00）が一致するかチェック
       const isBooked = bookedSlots[`${dateStr}_${time}`] === true;
-      
-      // 過去でもなく、予約もされていなければ空き枠
       const isAvailable = !isPast && !isBooked;
 
       const slotBtn = document.createElement("button");
@@ -112,7 +137,6 @@ function renderCalendar() {
         slotBtn.innerHTML = `<span>${time}</span><span class="mark">〇</span>`;
         slotBtn.onclick = () => openForm({ date: dateStr, time: time });
       } else {
-        // 埋まっている、または過去の枠
         slotBtn.innerHTML = `<span>${time}</span><span class="mark">✕</span>`;
         slotBtn.disabled = true;
       }
@@ -237,7 +261,7 @@ function switchView(viewId) {
 function showLoading(text) {
   const el = document.getElementById("loading");
   el.textContent = text;
-  el.style.display = "flex"; // flexで中央寄せを維持
+  el.style.display = "flex";
 }
 function hideLoading() {
   document.getElementById("loading").style.display = "none";
