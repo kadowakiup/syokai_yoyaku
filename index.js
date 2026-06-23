@@ -155,40 +155,87 @@ function openForm(slot) {
 
 // ★修正：応募者の入力欄を「姓・名・セイ・メイ」の4点項目に生成
 let applicantCount = 0;
+// ★修正：応募者の入力欄を生成（2人目以降には削除ボタンを設置）
 function addApplicantField() {
-  applicantCount++;
   const container = document.getElementById("applicants-container");
+  
+  // 現在すでにある応募者ブロックの数を取得
+  const existingBlocks = container.querySelectorAll(".applicant-block").length;
+  const currentNum = existingBlocks + 1;
   
   const block = document.createElement("div");
   block.className = "applicant-block";
   block.style.borderBottom = "1px dashed #ccc";
   block.style.paddingBottom = "15px";
   block.style.marginBottom = "15px";
+  block.style.position = "relative"; // 削除ボタンを右上絶対配置するための基準
+  
+  // 2人目以降の場合のみ右上に削除ボタンを表示するHTMLを作成
+  let deleteBtnHtml = "";
+  if (existingBlocks > 0) {
+    deleteBtnHtml = `
+      <button type="button" class="btn-delete-applicant" style="
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+        border: none;
+        color: #ff4d8d;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 5px;
+      ">削除</button>
+    `;
+  }
   
   block.innerHTML = `
-    <h3 style="font-size: 14px; margin-bottom: 10px; color: #01b6ff;">応募者 ${applicantCount}</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <h3 class="applicant-title" style="font-size: 14px; margin: 0; color: #01b6ff;">応募者 ${currentNum}</h3>
+    </div>
+    ${deleteBtnHtml}
     <div style="display: flex; gap: 10px; margin-bottom: 8px;">
       <div style="flex: 1;">
         <label style="font-size: 12px;">姓</label>
-        <input type="text" class="input-last-name" placeholder="山田" required style="padding: 8px;">
+        <input type="text" class="input-last-name" placeholder="山田" required style="padding: 8px; width: 100%; box-sizing: border-box;">
       </div>
       <div style="flex: 1;">
         <label style="font-size: 12px;">名</label>
-        <input type="text" class="input-first-name" placeholder="太郎" required style="padding: 8px;">
+        <input type="text" class="input-first-name" placeholder="太郎" required style="padding: 8px; width: 100%; box-sizing: border-box;">
       </div>
     </div>
     <div style="display: flex; gap: 10px;">
       <div style="flex: 1;">
         <label style="font-size: 12px;">セイ</label>
-        <input type="text" class="input-last-kana" placeholder="ヤマダ" required style="padding: 8px;">
+        <input type="text" class="input-last-kana" placeholder="ヤマダ" required style="padding: 8px; width: 100%; box-sizing: border-box;">
       </div>
       <div style="flex: 1;">
         <label style="font-size: 12px;">メイ</label>
-        <input type="text" class="input-first-kana" placeholder="タロウ" required style="padding: 8px;">
+        <input type="text" class="input-first-kana" placeholder="タロウ" required style="padding: 8px; width: 100%; box-sizing: border-box;">
       </div>
     </div>
   `;
+  
+  // 削除ボタンが生成された場合のみ、クリックイベントを設定
+  if (existingBlocks > 0) {
+    block.querySelector(".btn-delete-applicant").onclick = function() {
+      block.remove();       // 自分自身の入力ブロックを削除
+      reindexApplicants();  // 残った応募者の番号（タイトル）を詰め直す
+    };
+  }
+
   container.appendChild(block);
+}
+
+// ★新規追加：削除されたあとに「応募者 1」「応募者 2」のナンバリングを綺麗に整える関数
+function reindexApplicants() {
+  const blocks = document.querySelectorAll(".applicant-block");
+  blocks.forEach((block, index) => {
+    const title = block.querySelector(".applicant-title");
+    if (title) {
+      title.textContent = `応募者 ${index + 1}`;
+    }
+  });
 }
 
 // ★修正：確認画面の生成（4点セットのデータを取得・表示）
