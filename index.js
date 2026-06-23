@@ -1,4 +1,4 @@
-const GAS_URL = "https://script.google.com/macros/s/あなたのデプロイURL/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwW_-G99eipt0gSebUvimB7d6s1aHFYdcaK1ZHqrtq09Y9FnrokDSR83O2SKwFb9JvjHg/exec";
 
 let reservationData = []; // Anycrossから取得した空き枠データ
 let introducerName = ""; // Anycrossから取得した紹介者名
@@ -8,7 +8,7 @@ let selectedSlot = null; // 選択された予約枠
 window.onload = async function () {
   showLoading("初期化中...");
   try {
-    await liff.init({ liffId: "あなたのLIFF_ID" });
+    await liff.init({ liffId: "2009827198-yS0bgjjH" });
     if (!liff.isLoggedIn()) {
       liff.login({ redirectUri: window.location.href });
       return;
