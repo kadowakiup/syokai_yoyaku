@@ -68,8 +68,7 @@ function renderCalendar() {
     `${currentStartDate.getMonth()+1}/${currentStartDate.getDate()} 〜 ${endDate.getMonth()+1}/${endDate.getDate()}`;
 
   // 今日より前の週には戻れないようにする
-  const todayZero = new Date();
-  todayZero.setHours(0, 0, 0, 0);
+  const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   document.getElementById("btn-prev-week").disabled = currentStartDate <= todayZero;
 
   const weekNames = ["日", "月", "火", "水", "木", "金", "土"];
@@ -78,7 +77,11 @@ function renderCalendar() {
   for (let i = 0; i < 7; i++) {
     const targetDate = new Date(currentStartDate);
     targetDate.setDate(targetDate.getDate() + i);
-    const dateStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
+    
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, "0");
+    const dateNum = String(targetDate.getDate()).padStart(2, "0");
+    const dateStr = `${year}-${month}-${dateNum}`; // 例: 2026-06-23
 
     const col = document.createElement("div");
     col.className = "calendar-col";
@@ -90,12 +93,14 @@ function renderCalendar() {
 
     // TIME_SLOTS に基づいて全ての枠を生成
     TIME_SLOTS.forEach(time => {
-      // その枠の日時を生成して、現在時刻と比較
-      const slotDt = new Date(`${dateStr}T${time}:00`);
+      // iOSのブラウザバグを防ぐため、文字列ではなく数値でDateを生成
+      const [hours, minutes] = time.split(":");
+      const slotDt = new Date(year, targetDate.getMonth(), targetDate.getDate(), Number(hours), Number(minutes), 0);
+      
       const isPast = slotDt < today; 
       
-      // 予約済みかどうかチェック
-      const isBooked = bookedSlots[`${dateStr}_${time}`];
+      // GAS側から送られてきたデータとキー（2026-06-23_18:00）が一致するかチェック
+      const isBooked = bookedSlots[`${dateStr}_${time}`] === true;
       
       // 過去でもなく、予約もされていなければ空き枠
       const isAvailable = !isPast && !isBooked;
