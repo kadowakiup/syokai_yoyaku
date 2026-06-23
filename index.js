@@ -1,7 +1,19 @@
+// const GAS_URL = "https://script.google.com/macros/s/AKfycbwW_-G99eipt0gSebUvimB7d6s1aHFYdcaK1ZHqrtq09Y9FnrokDSR83O2SKwFb9JvjHg/exec";
+// await liff.init({ liffId: "2009827198-yS0bgjjH" });
+
+
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwW_-G99eipt0gSebUvimB7d6s1aHFYdcaK1ZHqrtq09Y9FnrokDSR83O2SKwFb9JvjHg/exec";
 
-let reservationData = []; // Anycrossから取得した空き枠データ
-let introducerName = ""; // Anycrossから取得した紹介者名
+// 固定の予約枠ルール
+const TIME_SLOTS = [
+  "13:00", "13:15", "13:30", "13:45",
+  "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45",
+  "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45",
+  "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45"
+];
+
+let bookedSlots = {}; // 予約済みの枠（GASから取得）
+let introducerName = ""; // 紹介者名（GASから取得）
 let currentStartDate = new Date(); // カレンダー表示の起点（今日）
 let selectedSlot = null; // 選択された予約枠
 
@@ -24,7 +36,6 @@ window.onload = async function () {
   setupEventListeners();
 };
 
-// ① Anycross経由で予約状況を取得
 async function fetchReservationData(idToken) {
   showLoading("予約状況を取得中...");
   const profile = await liff.getProfile();
@@ -36,33 +47,30 @@ async function fetchReservationData(idToken) {
 
   if (!data.success) throw new Error(data.message || "データ取得失敗");
 
-  // Anycrossからの戻り値想定: { introducer: "田中", slots: [{ date: "2026-06-25", time: "14:00", available: true }, ...] }
   introducerName = data.introducer || "不明";
-  reservationData = data.slots || [];
+  bookedSlots = data.bookedSlots || {}; // { "2026-06-25_17:15": true } のような形式
   
-  // 今日の日付で時間をリセット
   currentStartDate = new Date();
   currentStartDate.setHours(0, 0, 0, 0);
   
   renderCalendar();
 }
 
-// カレンダーの描画（7日間表示）
 function renderCalendar() {
   const grid = document.getElementById("calendar-grid");
   grid.innerHTML = "";
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = new Date(); // 現在時刻（過去の時間を予約不可にするため）
 
-  // 表示期間のラベル更新
   const endDate = new Date(currentStartDate);
   endDate.setDate(endDate.getDate() + 6);
   document.getElementById("current-week-label").textContent = 
     `${currentStartDate.getMonth()+1}/${currentStartDate.getDate()} 〜 ${endDate.getMonth()+1}/${endDate.getDate()}`;
 
-  // 「前の週」ボタンの制御（今日より前には戻れないようにする）
-  document.getElementById("btn-prev-week").disabled = currentStartDate <= today;
+  // 今日より前の週には戻れないようにする
+  const todayZero = new Date();
+  todayZero.setHours(0, 0, 0, 0);
+  document.getElementById("btn-prev-week").disabled = currentStartDate <= todayZero;
 
   const weekNames = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -80,27 +88,33 @@ function renderCalendar() {
     header.innerHTML = `${targetDate.getDate()}日<br>(${weekNames[targetDate.getDay()]})`;
     col.appendChild(header);
 
-    // その日の予約枠をフィルタリングして表示
-    const daySlots = reservationData.filter(slot => slot.date === dateStr);
-    
-    if (daySlots.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "slot empty";
-      empty.textContent = "枠なし";
-      col.appendChild(empty);
-    } else {
-      daySlots.forEach(slot => {
-        const slotBtn = document.createElement("button");
-        slotBtn.className = `slot ${slot.available ? 'available' : 'full'}`;
-        slotBtn.textContent = slot.time;
-        slotBtn.disabled = !slot.available;
-        
-        if (slot.available) {
-          slotBtn.onclick = () => openForm(slot);
-        }
-        col.appendChild(slotBtn);
-      });
-    }
+    // TIME_SLOTS に基づいて全ての枠を生成
+    TIME_SLOTS.forEach(time => {
+      // その枠の日時を生成して、現在時刻と比較
+      const slotDt = new Date(`${dateStr}T${time}:00`);
+      const isPast = slotDt < today; 
+      
+      // 予約済みかどうかチェック
+      const isBooked = bookedSlots[`${dateStr}_${time}`];
+      
+      // 過去でもなく、予約もされていなければ空き枠
+      const isAvailable = !isPast && !isBooked;
+
+      const slotBtn = document.createElement("button");
+      slotBtn.className = `slot ${isAvailable ? 'available' : 'full'}`;
+      
+      if (isAvailable) {
+        slotBtn.innerHTML = `<span>${time}</span><span class="mark">〇</span>`;
+        slotBtn.onclick = () => openForm({ date: dateStr, time: time });
+      } else {
+        // 埋まっている、または過去の枠
+        slotBtn.innerHTML = `<span>${time}</span><span class="mark">✕</span>`;
+        slotBtn.disabled = true;
+      }
+      
+      col.appendChild(slotBtn);
+    });
+
     grid.appendChild(col);
   }
 }
@@ -111,7 +125,6 @@ function openForm(slot) {
   document.getElementById("input-datetime").value = `${slot.date} ${slot.time}`;
   document.getElementById("input-introducer").value = introducerName;
   
-  // 応募者入力欄を初期化（最低1名）
   const container = document.getElementById("applicants-container");
   container.innerHTML = "";
   addApplicantField();
@@ -119,7 +132,6 @@ function openForm(slot) {
   switchView("view-form");
 }
 
-// 応募者入力フィールドの追加
 let applicantCount = 0;
 function addApplicantField() {
   applicantCount++;
@@ -133,7 +145,6 @@ function addApplicantField() {
   container.appendChild(div);
 }
 
-// 確認画面の生成
 function showConfirm() {
   const applicants = Array.from(document.querySelectorAll(".input-applicant"))
                           .map(input => input.value.trim())
@@ -159,7 +170,6 @@ function showConfirm() {
   switchView("view-confirm");
 }
 
-// Anycrossへ提出
 async function submitReservation() {
   showLoading("予約を確定しています...");
   try {
@@ -198,7 +208,6 @@ async function submitReservation() {
   }
 }
 
-// イベントリスナーの登録
 function setupEventListeners() {
   document.getElementById("btn-next-week").onclick = () => {
     currentStartDate.setDate(currentStartDate.getDate() + 7);
@@ -215,7 +224,6 @@ function setupEventListeners() {
   document.getElementById("btn-submit").onclick = submitReservation;
 }
 
-// ユーティリティ
 function switchView(viewId) {
   ["view-calendar", "view-form", "view-confirm"].forEach(id => {
     document.getElementById(id).style.display = (id === viewId) ? "block" : "none";
@@ -224,7 +232,7 @@ function switchView(viewId) {
 function showLoading(text) {
   const el = document.getElementById("loading");
   el.textContent = text;
-  el.style.display = "block";
+  el.style.display = "flex"; // flexで中央寄せを維持
 }
 function hideLoading() {
   document.getElementById("loading").style.display = "none";

@@ -55,35 +55,37 @@ body {
   padding: 0 10px;
   gap: 5px;
 }
+/* カレンダーの枠デザイン調整 */
 .calendar-col {
-  min-width: 70px;
+  min-width: 85px; /* 少し幅を広げる */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.calendar-header {
-  text-align: center;
-  font-size: 12px;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
+
 .slot {
   width: 100%;
-  padding: 10px 0;
-  margin-bottom: 8px;
-  text-align: center;
+  padding: 8px 6px; /* 高さを少しコンパクトに */
+  margin-bottom: 6px;
   border-radius: 4px;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between; /* 時間と〇✕を左右に分ける */
+  align-items: center;
+}
+.slot .mark {
+  font-weight: bold;
 }
 .slot.available {
   background-color: #e0f7fa;
   color: #00838f;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 .slot.full {
-  background-color: #eee;
-  color: #aaa;
+  background-color: #f2f2f2;
+  color: #b0b0b0;
 }
 .slot.empty {
   background: none;
