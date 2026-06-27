@@ -1,36 +1,24 @@
 /* ========================================================
-   Variables & Colors (色と変数の定義)
+   Variables & Colors (画像に基づいたカラーパレット)
    ======================================================== */
-$bg-cream: #fffbf5;
-$bg-white: #ffffff;
-$color-text: #333333;
-$color-text-muted: #888888;
-$color-border-main: #333333;
-$color-border-light: #eedec4;
+$bg-main: #a9e5fc;           /* 背景のライトブルー */
+$color-orange: #ff6840;      /* カード：オレンジ */
+$color-blue: #5b8cff;        /* カード：ブルー */
+$color-purple: #b589ff;      /* カード：パープル */
 
-/* ポップで可愛いパステルカラー */
-$color-primary: #01b6ff;      /* パステルブルー */
-$color-secondary: #ff6b8b;    /* ポップピンク */
-
-/* カレンダーの曜日・枠用カラー */
-$color-sat: #6bbdff;
-$color-sun: #ff8cae;
-$color-slot-avail-bg: #e8faff;
-$color-slot-avail-text: #007fa9;
-$color-slot-full-bg: #f5f5f5;
-$color-slot-full-text: #bbb;
-$color-readonly-bg: #f0f4f8;   /* ★エラー修正: 薄いブルーグレー */
-
+$text-main: #1a1a1a;         /* ベースの濃い文字色 */
+$text-white: #ffffff;        /* 白抜き文字 */
+$bg-white-card: #ffffff;     /* 入力フォーム用の白背景 */
 
 /* ========================================================
-   Base Styles (基本設定)
+   Base Styles
    ======================================================== */
 body {
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans", sans-serif;
-  color: $color-text;
+  font-family: "Varela Round", "Nunito", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  color: $text-main;
   margin: 0;
   padding: 0;
-  background-color: $bg-cream;
+  background-color: $bg-main; /* 画面全体をライトブルーに */
 }
 
 /* ローディング画面 */
@@ -40,9 +28,9 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: $color-secondary;
-  font-weight: 800;
+  background-color: rgba(169, 229, 252, 0.9); /* 背景色に合わせた透過 */
+  color: $color-orange;
+  font-weight: 900;
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -50,18 +38,17 @@ body {
   z-index: 1000;
 }
 
-/* タイトル（リボン・マーカー風） */
+/* タイトル（How to Enjoy風の太字・背景なし） */
 .title {
   text-align: center;
-  font-size: 20px;
-  font-weight: 800;
-  padding: 24px 0;
-  background-color: $bg-white;
-  margin: 0 0 20px 0;
-  border-bottom: 3px solid #f0e6d2;
-  color: #222222;
+  font-size: 26px;
+  font-weight: 900;
+  padding: 30px 0 20px;
+  background-color: transparent;
+  border: none;
+  color: $text-main;
+  letter-spacing: 1px;
 }
-
 
 /* ========================================================
    Calendar View (カレンダー画面)
@@ -70,29 +57,28 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px 16px;
-  font-weight: 800;
+  padding: 0 16px 20px;
+  font-weight: 900;
   font-size: 15px;
 
   .nav-btn {
-    padding: 8px 16px;
-    border: 2px solid $color-border-main;
-    background: $bg-white;
+    padding: 10px 18px;
+    background: $bg-white-card;
+    border: none;
     border-radius: 20px;
+    color: $text-main;
     font-weight: 800;
-    box-shadow: 0 3px 0 $color-border-main;
-    transition: all 0.1s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     cursor: pointer;
 
     &:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 0 0 $color-border-main;
+      transform: scale(0.95);
     }
 
     &:disabled {
-      color: #cccccc;
-      border-color: #cccccc;
+      color: #bbbbbb;
       box-shadow: none;
+      background: rgba(255,255,255,0.5);
     }
   }
 }
@@ -100,161 +86,198 @@ body {
 .calendar-grid {
   display: flex;
   overflow-x: auto;
-  padding: 0 12px 20px;
-  gap: 8px;
-  -webkit-overflow-scrolling: touch; /* スマホでの横スクロールを滑らかに */
+  padding: 0 16px 30px;
+  gap: 12px;
+  -webkit-overflow-scrolling: touch;
 
   .calendar-col {
-    min-width: 88px;
+    min-width: 110px; /* カードらしく幅を広めに */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: $bg-white;
-    padding: 8px 4px;
+    padding: 20px 10px;
     border-radius: 24px;
-    border: 2px solid $color-border-light;
+    border: none;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+
+    /* ★マジック：列ごとにオレンジ、ブルー、パープルを繰り返す */
+    &:nth-child(3n+1) { background-color: $color-orange; }
+    &:nth-child(3n+2) { background-color: $color-blue; }
+    &:nth-child(3n+3) { background-color: $color-purple; }
 
     /* ヘッダー部分（日付・曜日） */
     .calendar-header {
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       white-space: nowrap;
 
       .day-num {
-        font-size: 12px;
-        font-weight: 800;
-        color: $color-text;
+        font-size: 20px;
+        font-weight: 900;
+        color: $text-white;
       }
 
       .day-name {
-        font-size: 11px;
-        color: #999999;
-        font-weight: normal;
-        margin-left: 2px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: bold;
+        margin-left: 4px;
 
-        &.sat {
-          color: $color-sat;
-          font-weight: 800;
-        }
-
-        &.sun {
-          color: $color-sun;
-          font-weight: 800;
-        }
+        /* 背景の色付けは親要素のカード色に任せるため解除 */
+        &.sat, &.sun { color: rgba(255, 255, 255, 0.9); background: none; }
       }
     }
 
-    /* 予約枠ボタン */
+    /* 予約枠ボタン（画像の「詳しくみる」ボタン風の白枠デザイン） */
     .slot {
-      width: 90%;
-      padding: 10px 6px;
-      margin-bottom: 8px;
-      border-radius: 18px;
-      border: 2px solid $color-border-main;
+      width: 95%;
+      padding: 10px 0;
+      margin-bottom: 10px;
+      border-radius: 50px; /* 完全な丸み（ピルシェイプ） */
       font-size: 13px;
       font-weight: 800;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      gap: 8px;
       box-sizing: border-box;
       transition: all 0.1s;
 
-      .mark {
-        font-size: 14px;
-      }
-
       /* 空き枠 */
       &.available {
-        background-color: $color-slot-avail-bg;
-        color: $color-slot-avail-text;
-        border-color: $color-primary;
-        box-shadow: 0 3px 0 $color-primary;
+        background-color: transparent;
+        border: 1px solid $text-white;
+        color: $text-white;
         cursor: pointer;
 
         &:active {
-          transform: translateY(3px);
-          box-shadow: 0 0 0 $color-primary;
+          background-color: rgba(255, 255, 255, 0.2);
         }
       }
 
       /* 満席枠 */
       &.full {
-        background-color: $color-slot-full-bg;
-        color: $color-slot-full-text;
-        border-color: #dddddd;
-        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0.12);
+        border: 1px solid transparent;
+        color: rgba(255, 255, 255, 0.5);
       }
     }
   }
 }
 
-
 /* ========================================================
    Form & Confirm View (フォーム・確認画面)
    ======================================================== */
 .form-container, .confirm-container {
-  padding: 0 24px;
+  padding: 0 20px;
 
-  .form-group, .applicant-block {
-    margin-bottom: 20px;
-  }
-
-  label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 6px;
-    font-weight: 800;
-    color: #555555;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid $color-border-main;
-    border-radius: 16px;
-    box-sizing: border-box;
-    font-size: 15px;
-    font-weight: 600;
-    background-color: $bg-white;
-
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-    }
-  }
-
-  /* 編集不可（予約日時・紹介者） */
+  /* 編集不可（予約日時・紹介者）のブロック */
   .readonly-group {
+    background-color: $bg-white-card;
+    padding: 16px 20px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+    label {
+      color: $color-blue; /* アクセントにブルー */
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      display: block;
+    }
     input {
-      background-color: $color-readonly-bg;
-      border-color: #bbbbbb;
-      color: #777777;
+      background-color: #f5f8fa;
+      border: none;
+      color: $text-main;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      box-sizing: border-box;
     }
   }
 
-  /* 応募者情報ブロック（ぷっくりカード風） */
+  /* 応募者情報ブロック */
   .applicant-block {
-    background: $bg-white;
-    border: 2px solid $color-border-light !important;
-    border-radius: 20px;
-    padding: 16px !important;
-    box-shadow: 0 4px 0 $color-border-light;
+    background-color: $bg-white-card !important;
+    border: none !important;
+    border-radius: 24px;
+    padding: 24px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     position: relative;
+
+    h3 {
+      color: $color-orange !important;
+      font-size: 16px !important;
+      font-weight: 900;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+      font-weight: 800;
+      color: $text-main !important;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 14px;
+      font-weight: 600;
+      background-color: #f5f8fa;
+      color: $text-main;
+
+      &:focus {
+        outline: 2px solid $color-blue;
+        background-color: #e8f4fd;
+      }
+    }
+
+    /* 削除ボタンを可愛く調整 */
+    .btn-delete-applicant {
+      background-color: #ffe8ee !important;
+      color: $color-secondary !important;
+      border-radius: 10px;
+      padding: 6px 12px !important;
+      top: 20px !important;
+      right: 20px !important;
+    }
+  }
+
+  /* 確認画面の詳細エリア */
+  #confirm-details {
+    background-color: $bg-white-card;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    line-height: 1.8;
+    margin-bottom: 24px;
+    
+    p, ul, li { color: $text-main; font-weight: bold; }
   }
 }
 
-/* 追加ボタン（破線） */
+/* 追加ボタン（破線のアウトライン） */
 .add-btn {
-  background-color: $bg-white;
-  border: 2px dashed $color-secondary;
-  color: $color-secondary;
+  background-color: transparent;
+  border: 2px dashed $color-orange;
+  color: $color-orange;
   width: 100%;
-  padding: 12px;
-  border-radius: 16px;
-  font-weight: 800;
-  font-size: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 15px;
   margin-bottom: 30px;
   cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:active { background-color: rgba(255, 104, 64, 0.1); }
 }
 
 /* 下部アクションボタン群 */
@@ -264,39 +287,32 @@ body {
   gap: 12px;
   margin-bottom: 50px;
 
-  /* 提出・確認へ進むボタン */
+  /* 提出・確認へ進むボタン（オレンジベタ塗り） */
   .submit-btn {
-    background-color: $color-secondary;
-    color: $bg-white;
-    border: 2px solid $color-border-main;
-    padding: 16px;
+    background-color: $color-orange;
+    color: $text-white;
+    border: none;
+    padding: 18px;
     border-radius: 50px;
-    font-weight: 800;
+    font-weight: 900;
     font-size: 16px;
-    box-shadow: 0 4px 0 $color-border-main;
+    box-shadow: 0 6px 16px rgba(255, 104, 64, 0.3);
     cursor: pointer;
 
-    &:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 $color-border-main;
-    }
+    &:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(255, 104, 64, 0.3); }
   }
 
-  /* 戻るボタン */
+  /* 戻るボタン（白背景に黒フチ） */
   .back-btn {
-    background-color: $bg-white;
-    color: $color-border-main;
-    border: 2px solid $color-border-main;
+    background-color: $bg-white-card;
+    color: $text-main;
+    border: 2px solid $text-main;
     padding: 16px;
     border-radius: 50px;
-    font-weight: 800;
+    font-weight: 900;
     font-size: 15px;
-    box-shadow: 0 4px 0 $color-border-main;
     cursor: pointer;
 
-    &:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 $color-border-main;
-    }
+    &:active { transform: scale(0.98); }
   }
 }
