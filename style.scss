@@ -155,8 +155,8 @@ body {
       /* 空き枠：名刺のディープブルーを強調色に使用 */
       &.available {
         background-color: $bg-card;
-        border: 2px solid $color-deep-blue;
-        color: $color-deep-blue;
+        border: 2px solid $color-cyan;
+        color: $color-cyan;
         cursor: pointer;
 
         &:active {

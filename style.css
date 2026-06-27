@@ -146,8 +146,8 @@ body {
 }
 .calendar-grid .calendar-col .slot.available {
   background-color: #ffffff;
-  border: 2px solid #0a3d82;
-  color: #0a3d82;
+  border: 2px solid #00aef0;
+  color: #00aef0;
   cursor: pointer;
 }
 .calendar-grid .calendar-col .slot.available:active {
