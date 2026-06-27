@@ -5,6 +5,7 @@ $bg-main: #a9e5fc;           /* 背景のライトブルー */
 $color-orange: #ff6840;      /* カード：オレンジ */
 $color-blue: #5b8cff;        /* カード：ブルー */
 $color-purple: #b589ff;      /* カード：パープル */
+$color-pink: #ff4d8d;        /* ★修正：削除ボタン用のポップピンクを追加 */
 
 $text-main: #1a1a1a;         /* ベースの濃い文字色 */
 $text-white: #ffffff;        /* 白抜き文字 */
@@ -137,11 +138,16 @@ body {
       font-size: 13px;
       font-weight: 800;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      padding-left: 12px;
+      padding-right: 12px;
       box-sizing: border-box;
       transition: all 0.1s;
+
+      .mark {
+        font-size: 14px;
+      }
 
       /* 空き枠 */
       &.available {
@@ -242,7 +248,7 @@ body {
     /* 削除ボタンを可愛く調整 */
     .btn-delete-applicant {
       background-color: #ffe8ee !important;
-      color: $color-secondary !important;
+      color: $color-pink !important; /* ★修正：新しく定義した $color-pink を指定 */
       border-radius: 10px;
       padding: 6px 12px !important;
       top: 20px !important;
