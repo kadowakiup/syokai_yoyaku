@@ -116,7 +116,7 @@ body {
     /* ヘッダー部分（日付・曜日） */
     .calendar-header {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       white-space: nowrap;
 
       .day-num {
@@ -130,7 +130,6 @@ body {
         font-size: 11px;
         color: $text-muted;
         font-weight: bold;
-        margin-top: 2px;
         display: inline-block;
 
         &.sat { color: #3182ce; } 

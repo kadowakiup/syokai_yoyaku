@@ -105,7 +105,7 @@ body {
 }
 .calendar-grid .calendar-col .calendar-header {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   white-space: nowrap;
 }
 .calendar-grid .calendar-col .calendar-header .day-num {
@@ -118,7 +118,6 @@ body {
   font-size: 11px;
   color: #718096;
   font-weight: bold;
-  margin-top: 2px;
   display: inline-block;
 }
 .calendar-grid .calendar-col .calendar-header .day-name.sat {
