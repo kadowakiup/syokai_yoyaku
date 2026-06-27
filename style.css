@@ -1,23 +1,21 @@
 @charset "UTF-8";
 /* ========================================================
-   Variables & Colors (イラスト調のレトロポップカラー)
+   Variables & Colors (Universal Marketing Blue)
    ======================================================== */
-/* 背景：少し落ち着いたマスタードイエロー */
-/* カード：白 */
-/* 基本の文字・線の色（真っ黒ではなく濃いスミ色） */
-/* 差し色：キャラクターのズボンのようなブルー */
-/* 差し色：少しレトロなピンク（削除ボタンなど） */
+/* 名刺の鮮やかなディープブルー */
+/* グラデーション・ホバー用 */
+/* 病院感を消し、少しの活気を与えるアクセントカラー */
+/* 事務的にならない、洗練されたライトブルーグレー背景 */
+/* 真っ黒ではない、モダンな濃いグレー */
 /* ========================================================
    Base Styles
    ======================================================== */
 body {
-  /* 少し丸みのあるゴシック体や明朝体など、レトロなフォントが合います */
-  font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  color: #1a1a1a;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  color: #2d3748;
   margin: 0;
   padding: 0;
-  background-color: #fbe674; /* 画面全体をイエローに */
-  color: #1a1a1a;
+  background-color: #f2f6fa;
 }
 
 /* ローディング画面 */
@@ -27,27 +25,26 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #fbe674;
-  color: #1a1a1a;
-  font-weight: 900;
-  font-size: 20px;
+  background-color: rgba(242, 246, 250, 0.9);
+  color: #1254a5;
+  font-weight: bold;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px); /* 背景を少しぼかす（モダンな手法） */
 }
 
-/* タイトル（画像のような少しクセのある太字をイメージ） */
+/* タイトル */
 .title {
   text-align: center;
-  font-size: 24px;
-  font-weight: 900;
-  padding: 30px 0 20px;
-  background-color: transparent;
-  border: none;
-  color: #1a1a1a;
-  letter-spacing: 2px;
-  font-style: italic; /* 英語タイトル風の斜体アクセント */
+  font-size: 20px;
+  font-weight: bold;
+  padding: 24px 0 20px;
+  margin: 0 0 20px 0;
+  color: #1254a5;
+  letter-spacing: 1px;
 }
 
 /* ========================================================
@@ -58,49 +55,48 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px 20px;
-  font-weight: 900;
+  font-weight: bold;
   font-size: 15px;
 }
 .week-selector .nav-btn {
-  padding: 8px 16px;
+  padding: 10px 18px;
   background: #ffffff;
-  border: 2px solid #1a1a1a; /* 黒フチ */
-  border-radius: 20px;
-  color: #1a1a1a;
-  font-weight: 800;
-  box-shadow: 3px 3px 0 #1a1a1a; /* ★イラスト風のズラした影 */
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  color: #2d3748;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.2s ease;
 }
 .week-selector .nav-btn:active:not(:disabled) {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 #1a1a1a;
+  background: #f2f6fa;
+  transform: scale(0.97);
 }
 .week-selector .nav-btn:disabled {
-  color: #999;
-  border-color: #999;
-  box-shadow: 3px 3px 0 #999;
-  background: #f5f5f5;
+  color: #cbd5e0;
+  box-shadow: none;
+  background: transparent;
+  border: 1px solid transparent;
 }
 
 .calendar-grid {
   display: flex;
   overflow-x: auto;
   padding: 0 16px 30px;
-  gap: 16px;
+  gap: 12px;
   -webkit-overflow-scrolling: touch;
-  /* 画像の右側にある「白いカード」のイメージ */
 }
 .calendar-grid .calendar-col {
-  min-width: 100px;
+  min-width: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 8px;
+  padding: 16px 8px;
   background-color: #ffffff;
-  border: 2px solid #1a1a1a; /* 太めの黒枠 */
-  border-radius: 30px 30px 20px 20px; /* 上部を少し丸く */
-  box-shadow: 6px 6px 0 #1a1a1a; /* ★ここがレトロポップのポイント */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06); /* 名刺ブルーの影で透明感を出す */
+  border: 1px solid rgba(18, 84, 165, 0.05);
   /* ヘッダー部分（日付・曜日） */
 }
 .calendar-grid .calendar-col .calendar-header {
@@ -109,61 +105,60 @@ body {
   white-space: nowrap;
 }
 .calendar-grid .calendar-col .calendar-header .day-num {
-  font-size: 22px;
-  font-weight: 900;
-  color: #1a1a1a;
-  font-style: italic;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3748;
+  display: block;
 }
 .calendar-grid .calendar-col .calendar-header .day-name {
-  font-size: 13px;
-  color: #1a1a1a;
+  font-size: 11px;
+  color: #718096;
   font-weight: bold;
-  margin-left: 4px;
-  /* 土日の色も落ち着かせつつアクセントに */
+  margin-top: 2px;
+  display: inline-block;
 }
 .calendar-grid .calendar-col .calendar-header .day-name.sat {
-  color: #5575f6;
+  color: #3182ce;
 }
+.calendar-grid .calendar-col .calendar-header .day-name { /* 落ち着いた青 */ }
 .calendar-grid .calendar-col .calendar-header .day-name.sun {
-  color: #ff8fb0;
+  color: #e53e3e;
 }
+.calendar-grid .calendar-col .calendar-header .day-name { /* 落ち着いた赤 */ }
 .calendar-grid .calendar-col {
-  /* 予約枠ボタン */
+  /* 予約枠ボタン（スタイリッシュなピル型） */
 }
 .calendar-grid .calendar-col .slot {
   width: 95%;
-  padding: 10px 0;
+  padding: 10px 12px;
   margin-bottom: 10px;
-  border-radius: 50px;
+  border-radius: 8px;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: bold;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
   box-sizing: border-box;
-  transition: all 0.1s;
-  /* 空き枠（押せるボタン風） */
+  transition: all 0.2s ease;
+  /* 空き枠：名刺ブルーのフチと文字 */
 }
 .calendar-grid .calendar-col .slot.available {
   background-color: #ffffff;
-  border: 2px solid #1a1a1a;
-  color: #1a1a1a;
-  box-shadow: 3px 3px 0 #1a1a1a;
+  border: 1px solid #1254a5;
+  color: #1254a5;
   cursor: pointer;
 }
 .calendar-grid .calendar-col .slot.available:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 #1a1a1a;
+  background-color: #1254a5;
+  color: #ffffff;
 }
 .calendar-grid .calendar-col .slot {
-  /* 満席枠（グレーダウン・影なし） */
+  /* 満席枠：目立たないグレー */
 }
 .calendar-grid .calendar-col .slot.full {
-  background-color: #e6e6e6;
-  border: 2px solid #ccc;
-  color: #999;
-  box-shadow: none;
+  background-color: #edf2f7;
+  border: 1px solid transparent;
+  color: #a0aec0;
 }
 
 /* ========================================================
@@ -176,25 +171,25 @@ body {
 .form-container .readonly-group, .confirm-container .readonly-group {
   background-color: #ffffff;
   padding: 16px 20px;
-  border: 2px solid #1a1a1a;
-  border-radius: 20px;
+  border-radius: 16px;
   margin-bottom: 20px;
-  box-shadow: 4px 4px 0 #1a1a1a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
 }
 .form-container .readonly-group label, .confirm-container .readonly-group label {
-  color: #1a1a1a;
-  font-size: 13px;
-  font-weight: 900;
+  color: #1254a5;
+  font-size: 12px;
+  font-weight: bold;
   margin-bottom: 8px;
   display: block;
 }
 .form-container .readonly-group input, .confirm-container .readonly-group input {
-  background-color: #f2f2f2;
-  border: 2px solid #ccc;
-  color: #666;
+  background-color: transparent;
+  border: none;
+  color: #2d3748;
   width: 100%;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 4px 0;
+  font-size: 16px;
   font-weight: bold;
   box-sizing: border-box;
 }
@@ -203,134 +198,132 @@ body {
 }
 .form-container .applicant-block, .confirm-container .applicant-block {
   background-color: #ffffff !important;
-  border: 2px solid #1a1a1a !important;
-  border-radius: 24px;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px;
   padding: 24px !important;
-  margin-bottom: 24px !important;
-  box-shadow: 4px 4px 0 #1a1a1a;
+  margin-bottom: 20px !important;
+  box-shadow: 0 4px 15px rgba(18, 84, 165, 0.05);
   position: relative;
 }
 .form-container .applicant-block h3, .confirm-container .applicant-block h3 {
-  color: #1a1a1a !important;
-  font-size: 16px !important;
-  font-weight: 900;
+  color: #1254a5 !important;
+  font-size: 15px !important;
+  font-weight: bold;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f0f4f8;
+  padding-bottom: 8px;
 }
 .form-container .applicant-block label, .confirm-container .applicant-block label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   margin-bottom: 6px;
-  font-weight: 800;
-  color: #1a1a1a !important;
+  font-weight: bold;
+  color: #718096 !important;
 }
 .form-container .applicant-block input[type=text], .confirm-container .applicant-block input[type=text] {
   width: 100%;
   padding: 12px;
-  border: 2px solid #1a1a1a;
-  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   box-sizing: border-box;
   font-size: 14px;
-  font-weight: 600;
-  background-color: #ffffff;
-  color: #1a1a1a;
+  background-color: #f8fafc;
+  color: #2d3748;
+  transition: border-color 0.2s;
 }
 .form-container .applicant-block input[type=text]:focus, .confirm-container .applicant-block input[type=text]:focus {
   outline: none;
-  background-color: #fffde6; /* フォーカス時に薄い黄色 */
+  border-color: #1254a5;
+  background-color: #ffffff;
 }
 .form-container .applicant-block, .confirm-container .applicant-block {
-  /* 削除ボタン */
+  /* 削除ボタン（スッキリと） */
 }
 .form-container .applicant-block .btn-delete-applicant, .confirm-container .applicant-block .btn-delete-applicant {
-  background-color: #ffffff !important;
-  color: #ff8fb0 !important;
-  border: 2px solid #1a1a1a !important;
-  border-radius: 10px;
+  background-color: transparent !important;
+  color: #e53e3e !important;
+  border: 1px solid #e53e3e !important;
+  border-radius: 6px;
   padding: 4px 10px !important;
-  font-weight: 800;
-  box-shadow: 2px 2px 0 #1a1a1a;
+  font-size: 11px;
+  font-weight: bold;
   top: 20px !important;
   right: 20px !important;
-  transition: all 0.1s;
-}
-.form-container .applicant-block .btn-delete-applicant:active, .confirm-container .applicant-block .btn-delete-applicant:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 #1a1a1a;
 }
 .form-container, .confirm-container {
   /* 確認画面の詳細エリア */
 }
 .form-container #confirm-details, .confirm-container #confirm-details {
   background-color: #ffffff;
-  border: 2px solid #1a1a1a;
-  border-radius: 24px;
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: 4px 4px 0 #1a1a1a;
+  box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06);
+  border: 1px solid #e2e8f0;
   line-height: 1.8;
   margin-bottom: 24px;
 }
 .form-container #confirm-details p, .form-container #confirm-details ul, .form-container #confirm-details li, .confirm-container #confirm-details p, .confirm-container #confirm-details ul, .confirm-container #confirm-details li {
-  color: #1a1a1a;
+  color: #2d3748;
   font-weight: bold;
 }
 
-/* 追加ボタン（破線のアウトライン） */
+/* 追加ボタン */
 .add-btn {
   background-color: transparent;
-  border: 2px dashed #1a1a1a;
-  color: #1a1a1a;
+  border: 2px dashed #1254a5;
+  color: #1254a5;
   width: 100%;
   padding: 16px;
-  border-radius: 20px;
-  font-weight: 900;
-  font-size: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
   margin-bottom: 30px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 .add-btn:active {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(18, 84, 165, 0.05);
 }
 
 /* 下部アクションボタン群 */
 .button-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 50px;
-  /* 提出・確認へ進むボタン（青ベース） */
+  /* 提出・確認へ進むボタン（グラデーションで高級感と先進感を演出） */
 }
 .button-container .submit-btn {
-  background-color: #5575f6;
+  background: linear-gradient(135deg, #1254a5, #1e6bc7);
   color: #ffffff;
-  border: 2px solid #1a1a1a;
-  padding: 18px;
+  border: none;
+  padding: 16px;
   border-radius: 50px;
-  font-weight: 900;
+  font-weight: bold;
   font-size: 16px;
-  box-shadow: 4px 4px 0 #1a1a1a;
+  box-shadow: 0 4px 15px rgba(18, 84, 165, 0.3);
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.2s ease;
 }
 .button-container .submit-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 #1a1a1a;
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(18, 84, 165, 0.2);
 }
 .button-container {
-  /* 戻るボタン（白ベース） */
+  /* 戻るボタン */
 }
 .button-container .back-btn {
   background-color: #ffffff;
-  color: #1a1a1a;
-  border: 2px solid #1a1a1a;
+  color: #1254a5;
+  border: 1px solid #1254a5;
   padding: 16px;
   border-radius: 50px;
-  font-weight: 900;
+  font-weight: bold;
   font-size: 15px;
-  box-shadow: 4px 4px 0 #1a1a1a;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.2s ease;
 }
 .button-container .back-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 #1a1a1a;
+  background-color: rgba(18, 84, 165, 0.05);
+  transform: scale(0.98);
 }/*# sourceMappingURL=style.css.map */

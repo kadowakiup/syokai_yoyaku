@@ -1,24 +1,25 @@
 /* ========================================================
-   Variables & Colors (イラスト調のレトロポップカラー)
+   Variables & Colors (Universal Marketing Blue)
    ======================================================== */
-$bg-yellow: #fbe674;         /* 背景：少し落ち着いたマスタードイエロー */
-$bg-white: #ffffff;          /* カード：白 */
-$text-black: #1a1a1a;        /* 基本の文字・線の色（真っ黒ではなく濃いスミ色） */
+$color-primary: #1254a5;       /* 名刺の鮮やかなディープブルー */
+$color-primary-light: #1e6bc7; /* グラデーション・ホバー用 */
+$color-accent: #ff8c00;        /* 病院感を消し、少しの活気を与えるアクセントカラー */
 
-$accent-blue: #5575f6;       /* 差し色：キャラクターのズボンのようなブルー */
-$accent-pink: #ff8fb0;       /* 差し色：少しレトロなピンク（削除ボタンなど） */
+$bg-main: #f2f6fa;             /* 事務的にならない、洗練されたライトブルーグレー背景 */
+$bg-white: #ffffff;
+$text-main: #2d3748;           /* 真っ黒ではない、モダンな濃いグレー */
+$text-muted: #718096;
+$border-light: #e2e8f0;
 
 /* ========================================================
    Base Styles
    ======================================================== */
 body {
-  /* 少し丸みのあるゴシック体や明朝体など、レトロなフォントが合います */
-  font-family: "M PLUS Rounded 1c", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  color: $text-black;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  color: $text-main;
   margin: 0;
   padding: 0;
-  background-color: $bg-yellow; /* 画面全体をイエローに */
-  color: $text-black;
+  background-color: $bg-main;
 }
 
 /* ローディング画面 */
@@ -28,27 +29,26 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: $bg-yellow;
-  color: $text-black;
-  font-weight: 900;
-  font-size: 20px;
+  background-color: rgba(242, 246, 250, 0.9);
+  color: $color-primary;
+  font-weight: bold;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px); /* 背景を少しぼかす（モダンな手法） */
 }
 
-/* タイトル（画像のような少しクセのある太字をイメージ） */
+/* タイトル */
 .title {
   text-align: center;
-  font-size: 24px;
-  font-weight: 900;
-  padding: 30px 0 20px;
-  background-color: transparent;
-  border: none;
-  color: $text-black;
-  letter-spacing: 2px;
-  font-style: italic; /* 英語タイトル風の斜体アクセント */
+  font-size: 20px;
+  font-weight: bold;
+  padding: 24px 0 20px;
+  margin: 0 0 20px 0;
+  color: $color-primary;
+  letter-spacing: 1px;
 }
 
 /* ========================================================
@@ -59,30 +59,30 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 16px 20px;
-  font-weight: 900;
+  font-weight: bold;
   font-size: 15px;
 
   .nav-btn {
-    padding: 8px 16px;
+    padding: 10px 18px;
     background: $bg-white;
-    border: 2px solid $text-black; /* 黒フチ */
-    border-radius: 20px;
-    color: $text-black;
-    font-weight: 800;
-    box-shadow: 3px 3px 0 $text-black; /* ★イラスト風のズラした影 */
+    border: 1px solid $border-light;
+    border-radius: 50px;
+    color: $text-main;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.2s ease;
 
     &:active:not(:disabled) {
-      transform: translate(3px, 3px);
-      box-shadow: 0 0 0 $text-black;
+      background: $bg-main;
+      transform: scale(0.97);
     }
 
     &:disabled {
-      color: #999;
-      border-color: #999;
-      box-shadow: 3px 3px 0 #999;
-      background: #f5f5f5;
+      color: #cbd5e0;
+      box-shadow: none;
+      background: transparent;
+      border: 1px solid transparent;
     }
   }
 }
@@ -91,20 +91,19 @@ body {
   display: flex;
   overflow-x: auto;
   padding: 0 16px 30px;
-  gap: 16px;
+  gap: 12px;
   -webkit-overflow-scrolling: touch;
 
-  /* 画像の右側にある「白いカード」のイメージ */
   .calendar-col {
-    min-width: 100px; 
+    min-width: 90px; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 8px;
+    padding: 16px 8px;
     background-color: $bg-white;
-    border: 2px solid $text-black; /* 太めの黒枠 */
-    border-radius: 30px 30px 20px 20px; /* 上部を少し丸く */
-    box-shadow: 6px 6px 0 $text-black; /* ★ここがレトロポップのポイント */
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06); /* 名刺ブルーの影で透明感を出す */
+    border: 1px solid rgba(18, 84, 165, 0.05);
 
     /* ヘッダー部分（日付・曜日） */
     .calendar-header {
@@ -113,59 +112,56 @@ body {
       white-space: nowrap;
 
       .day-num {
-        font-size: 22px;
-        font-weight: 900;
-        color: $text-black;
-        font-style: italic;
+        font-size: 18px;
+        font-weight: bold;
+        color: $text-main;
+        display: block;
       }
 
       .day-name {
-        font-size: 13px;
-        color: $text-black;
+        font-size: 11px;
+        color: $text-muted;
         font-weight: bold;
-        margin-left: 4px;
+        margin-top: 2px;
+        display: inline-block;
 
-        /* 土日の色も落ち着かせつつアクセントに */
-        &.sat { color: $accent-blue; }
-        &.sun { color: $accent-pink; }
+        &.sat { color: #3182ce; } /* 落ち着いた青 */
+        &.sun { color: #e53e3e; } /* 落ち着いた赤 */
       }
     }
 
-    /* 予約枠ボタン */
+    /* 予約枠ボタン（スタイリッシュなピル型） */
     .slot {
       width: 95%;
-      padding: 10px 0;
+      padding: 10px 12px;
       margin-bottom: 10px;
-      border-radius: 50px;
+      border-radius: 8px;
       font-size: 13px;
-      font-weight: 800;
+      font-weight: bold;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
       box-sizing: border-box;
-      transition: all 0.1s;
+      transition: all 0.2s ease;
 
-      /* 空き枠（押せるボタン風） */
+      /* 空き枠：名刺ブルーのフチと文字 */
       &.available {
         background-color: $bg-white;
-        border: 2px solid $text-black;
-        color: $text-black;
-        box-shadow: 3px 3px 0 $text-black;
+        border: 1px solid $color-primary;
+        color: $color-primary;
         cursor: pointer;
 
         &:active {
-          transform: translate(3px, 3px);
-          box-shadow: 0 0 0 $text-black;
+          background-color: $color-primary;
+          color: $bg-white;
         }
       }
 
-      /* 満席枠（グレーダウン・影なし） */
+      /* 満席枠：目立たないグレー */
       &.full {
-        background-color: #e6e6e6;
-        border: 2px solid #ccc;
-        color: #999;
-        box-shadow: none;
+        background-color: #edf2f7;
+        border: 1px solid transparent;
+        color: #a0aec0;
       }
     }
   }
@@ -181,25 +177,25 @@ body {
   .readonly-group {
     background-color: $bg-white;
     padding: 16px 20px;
-    border: 2px solid $text-black;
-    border-radius: 20px;
+    border-radius: 16px;
     margin-bottom: 20px;
-    box-shadow: 4px 4px 0 $text-black;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    border: 1px solid $border-light;
 
     label {
-      color: $text-black;
-      font-size: 13px;
-      font-weight: 900;
+      color: $color-primary;
+      font-size: 12px;
+      font-weight: bold;
       margin-bottom: 8px;
       display: block;
     }
     input {
-      background-color: #f2f2f2;
-      border: 2px solid #ccc;
-      color: #666;
+      background-color: transparent;
+      border: none;
+      color: $text-main;
       width: 100%;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 4px 0;
+      font-size: 16px;
       font-weight: bold;
       box-sizing: border-box;
     }
@@ -208,137 +204,134 @@ body {
   /* 応募者情報ブロック */
   .applicant-block {
     background-color: $bg-white !important;
-    border: 2px solid $text-black !important;
-    border-radius: 24px;
+    border: 1px solid $border-light !important;
+    border-radius: 16px;
     padding: 24px !important;
-    margin-bottom: 24px !important;
-    box-shadow: 4px 4px 0 $text-black;
+    margin-bottom: 20px !important;
+    box-shadow: 0 4px 15px rgba(18, 84, 165, 0.05);
     position: relative;
 
     h3 {
-      color: $text-black !important;
-      font-size: 16px !important;
-      font-weight: 900;
+      color: $color-primary !important;
+      font-size: 15px !important;
+      font-weight: bold;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #f0f4f8;
+      padding-bottom: 8px;
     }
 
     label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       margin-bottom: 6px;
-      font-weight: 800;
-      color: $text-black !important;
+      font-weight: bold;
+      color: $text-muted !important;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      border: 2px solid $text-black;
-      border-radius: 12px;
+      border: 1px solid $border-light;
+      border-radius: 8px;
       box-sizing: border-box;
       font-size: 14px;
-      font-weight: 600;
-      background-color: $bg-white;
-      color: $text-black;
+      background-color: #f8fafc;
+      color: $text-main;
+      transition: border-color 0.2s;
 
       &:focus {
         outline: none;
-        background-color: #fffde6; /* フォーカス時に薄い黄色 */
+        border-color: $color-primary;
+        background-color: $bg-white;
       }
     }
 
-    /* 削除ボタン */
+    /* 削除ボタン（スッキリと） */
     .btn-delete-applicant {
-      background-color: $bg-white !important;
-      color: $accent-pink !important;
-      border: 2px solid $text-black !important;
-      border-radius: 10px;
+      background-color: transparent !important;
+      color: #e53e3e !important;
+      border: 1px solid #e53e3e !important;
+      border-radius: 6px;
       padding: 4px 10px !important;
-      font-weight: 800;
-      box-shadow: 2px 2px 0 $text-black;
+      font-size: 11px;
+      font-weight: bold;
       top: 20px !important;
       right: 20px !important;
-      transition: all 0.1s;
-
-      &:active {
-        transform: translate(2px, 2px);
-        box-shadow: 0 0 0 $text-black;
-      }
     }
   }
 
   /* 確認画面の詳細エリア */
   #confirm-details {
     background-color: $bg-white;
-    border: 2px solid $text-black;
-    border-radius: 24px;
+    border-radius: 16px;
     padding: 24px;
-    box-shadow: 4px 4px 0 $text-black;
+    box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06);
+    border: 1px solid $border-light;
     line-height: 1.8;
     margin-bottom: 24px;
     
-    p, ul, li { color: $text-black; font-weight: bold; }
+    p, ul, li { color: $text-main; font-weight: bold; }
   }
 }
 
-/* 追加ボタン（破線のアウトライン） */
+/* 追加ボタン */
 .add-btn {
   background-color: transparent;
-  border: 2px dashed $text-black;
-  color: $text-black;
+  border: 2px dashed $color-primary;
+  color: $color-primary;
   width: 100%;
   padding: 16px;
-  border-radius: 20px;
-  font-weight: 900;
-  font-size: 15px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
   margin-bottom: 30px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 
-  &:active { background-color: rgba(0, 0, 0, 0.05); }
+  &:active { background-color: rgba(18, 84, 165, 0.05); }
 }
 
 /* 下部アクションボタン群 */
 .button-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 50px;
 
-  /* 提出・確認へ進むボタン（青ベース） */
+  /* 提出・確認へ進むボタン（グラデーションで高級感と先進感を演出） */
   .submit-btn {
-    background-color: $accent-blue;
+    background: linear-gradient(135deg, $color-primary, $color-primary-light);
     color: $bg-white;
-    border: 2px solid $text-black;
-    padding: 18px;
+    border: none;
+    padding: 16px;
     border-radius: 50px;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 16px;
-    box-shadow: 4px 4px 0 $text-black;
+    box-shadow: 0 4px 15px rgba(18, 84, 165, 0.3);
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.2s ease;
 
     &:active { 
-      transform: translate(4px, 4px); 
-      box-shadow: 0 0 0 $text-black; 
+      transform: scale(0.98); 
+      box-shadow: 0 2px 8px rgba(18, 84, 165, 0.2); 
     }
   }
 
-  /* 戻るボタン（白ベース） */
+  /* 戻るボタン */
   .back-btn {
     background-color: $bg-white;
-    color: $text-black;
-    border: 2px solid $text-black;
+    color: $color-primary;
+    border: 1px solid $color-primary;
     padding: 16px;
     border-radius: 50px;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
-    box-shadow: 4px 4px 0 $text-black;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.2s ease;
 
     &:active { 
-      transform: translate(4px, 4px); 
-      box-shadow: 0 0 0 $text-black; 
+      background-color: rgba(18, 84, 165, 0.05);
+      transform: scale(0.98); 
     }
   }
 }
