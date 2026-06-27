@@ -1,13 +1,18 @@
 /* ========================================================
-   Variables & Colors (Universal Marketing Blue)
+   Variables & Colors (Universal Marketing)
    ======================================================== */
-$color-primary: #1254a5;       /* 名刺の鮮やかなディープブルー */
-$color-primary-light: #1e6bc7; /* グラデーション・ホバー用 */
-$color-accent: #ff8c00;        /* 病院感を消し、少しの活気を与えるアクセントカラー */
+/* ロゴのメインカラー（鮮やかなシアン） */
+$color-cyan: #00aef0;         
+$color-cyan-light: #33beff;   
 
-$bg-main: #f2f6fa;             /* 事務的にならない、洗練されたライトブルーグレー背景 */
-$bg-white: #ffffff;
-$text-main: #2d3748;           /* 真っ黒ではない、モダンな濃いグレー */
+/* 名刺から抽出した背景用のディープブルー */
+$bg-deep-blue: #0a3d82;       
+$bg-dark-navy: #06234d;       
+
+/* カードとテキストの基本色 */
+$bg-card: #ffffff;
+$text-main: #1a202c;          /* カード内の濃いグレー */
+$text-white: #ffffff;         /* 背景に乗る白文字 */
 $text-muted: #718096;
 $border-light: #e2e8f0;
 
@@ -16,39 +21,42 @@ $border-light: #e2e8f0;
    ======================================================== */
 body {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  color: $text-main;
   margin: 0;
   padding: 0;
-  background-color: $bg-main;
+  /* 背景を名刺風の深いブルーのグラデーションに */
+  background: linear-gradient(135deg, $bg-deep-blue 0%, $bg-dark-navy 100%);
+  background-attachment: fixed; /* スクロールしても背景を固定 */
+  color: $text-main;
 }
 
-/* ローディング画面 */
+/* ローディング画面（ダークなガラス風） */
 .kousintyu {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(242, 246, 250, 0.9);
-  color: $color-primary;
+  background-color: rgba(6, 35, 77, 0.85);
+  color: $color-cyan;
   font-weight: bold;
   font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px); /* 背景を少しぼかす（モダンな手法） */
+  backdrop-filter: blur(8px);
 }
 
-/* タイトル */
+/* タイトル（白文字でスタイリッシュに） */
 .title {
   text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 900;
   padding: 24px 0 20px;
-  margin: 0 0 20px 0;
-  color: $color-primary;
-  letter-spacing: 1px;
+  margin: 0 0 10px 0;
+  color: $text-white;
+  letter-spacing: 2px;
+  font-style: italic; /* ロゴの斜体感を少し反映 */
 }
 
 /* ========================================================
@@ -61,28 +69,29 @@ body {
   padding: 0 16px 20px;
   font-weight: bold;
   font-size: 15px;
+  color: $text-white;
 
   .nav-btn {
     padding: 10px 18px;
-    background: $bg-white;
-    border: 1px solid $border-light;
+    background: rgba(255, 255, 255, 0.1); /* 半透明のかっこいいボタン */
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
-    color: $text-main;
+    color: $text-white;
     font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     cursor: pointer;
+    backdrop-filter: blur(4px);
     transition: all 0.2s ease;
 
     &:active:not(:disabled) {
-      background: $bg-main;
-      transform: scale(0.97);
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.95);
     }
 
     &:disabled {
-      color: #cbd5e0;
-      box-shadow: none;
+      color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
       background: transparent;
-      border: 1px solid transparent;
+      box-shadow: none;
     }
   }
 }
@@ -100,10 +109,10 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 16px 8px;
-    background-color: $bg-white;
+    background-color: $bg-card; /* 白いカード */
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06); /* 名刺ブルーの影で透明感を出す */
-    border: 1px solid rgba(18, 84, 165, 0.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border: none;
 
     /* ヘッダー部分（日付・曜日） */
     .calendar-header {
@@ -113,7 +122,7 @@ body {
 
       .day-num {
         font-size: 18px;
-        font-weight: bold;
+        font-weight: 900;
         color: $text-main;
         display: block;
       }
@@ -125,12 +134,12 @@ body {
         margin-top: 2px;
         display: inline-block;
 
-        &.sat { color: #3182ce; } /* 落ち着いた青 */
-        &.sun { color: #e53e3e; } /* 落ち着いた赤 */
+        &.sat { color: #3182ce; } 
+        &.sun { color: #e53e3e; } 
       }
     }
 
-    /* 予約枠ボタン（スタイリッシュなピル型） */
+    /* 予約枠ボタン */
     .slot {
       width: 95%;
       padding: 10px 12px;
@@ -144,23 +153,23 @@ body {
       box-sizing: border-box;
       transition: all 0.2s ease;
 
-      /* 空き枠：名刺ブルーのフチと文字 */
+      /* 空き枠：ロゴのシアンカラーを強調 */
       &.available {
-        background-color: $bg-white;
-        border: 1px solid $color-primary;
-        color: $color-primary;
+        background-color: $bg-card;
+        border: 2px solid $color-cyan;
+        color: $color-cyan;
         cursor: pointer;
 
         &:active {
-          background-color: $color-primary;
-          color: $bg-white;
+          background-color: $color-cyan;
+          color: $text-white;
         }
       }
 
       /* 満席枠：目立たないグレー */
       &.full {
         background-color: #edf2f7;
-        border: 1px solid transparent;
+        border: 2px solid transparent;
         color: #a0aec0;
       }
     }
@@ -175,15 +184,15 @@ body {
 
   /* 編集不可（予約日時・紹介者） */
   .readonly-group {
-    background-color: $bg-white;
+    background-color: $bg-card;
     padding: 16px 20px;
     border-radius: 16px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-    border: 1px solid $border-light;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: none;
 
     label {
-      color: $color-primary;
+      color: $color-cyan; /* アクセントにロゴのシアン */
       font-size: 12px;
       font-weight: bold;
       margin-bottom: 8px;
@@ -203,21 +212,22 @@ body {
 
   /* 応募者情報ブロック */
   .applicant-block {
-    background-color: $bg-white !important;
-    border: 1px solid $border-light !important;
+    background-color: $bg-card !important;
+    border: none !important;
     border-radius: 16px;
     padding: 24px !important;
     margin-bottom: 20px !important;
-    box-shadow: 0 4px 15px rgba(18, 84, 165, 0.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     position: relative;
 
     h3 {
-      color: $color-primary !important;
+      color: $color-cyan !important;
       font-size: 15px !important;
-      font-weight: bold;
+      font-weight: 900;
       margin-bottom: 16px;
       border-bottom: 2px solid #f0f4f8;
       padding-bottom: 8px;
+      font-style: italic;
     }
 
     label {
@@ -231,22 +241,23 @@ body {
     input[type="text"] {
       width: 100%;
       padding: 12px;
-      border: 1px solid $border-light;
+      border: 2px solid $border-light;
       border-radius: 8px;
       box-sizing: border-box;
       font-size: 14px;
       background-color: #f8fafc;
       color: $text-main;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
 
       &:focus {
         outline: none;
-        border-color: $color-primary;
-        background-color: $bg-white;
+        border-color: $color-cyan;
+        background-color: $bg-card;
+        box-shadow: 0 0 0 3px rgba(0, 174, 240, 0.1); /* シアンの淡い発光 */
       }
     }
 
-    /* 削除ボタン（スッキリと） */
+    /* 削除ボタン */
     .btn-delete-applicant {
       background-color: transparent !important;
       color: #e53e3e !important;
@@ -257,16 +268,22 @@ body {
       font-weight: bold;
       top: 20px !important;
       right: 20px !important;
+      transition: all 0.2s;
+
+      &:active {
+        background-color: #e53e3e !important;
+        color: $text-white !important;
+      }
     }
   }
 
   /* 確認画面の詳細エリア */
   #confirm-details {
-    background-color: $bg-white;
+    background-color: $bg-card;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 20px rgba(18, 84, 165, 0.06);
-    border: 1px solid $border-light;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: none;
     line-height: 1.8;
     margin-bottom: 24px;
     
@@ -276,9 +293,9 @@ body {
 
 /* 追加ボタン */
 .add-btn {
-  background-color: transparent;
-  border: 2px dashed $color-primary;
-  color: $color-primary;
+  background-color: rgba(0, 174, 240, 0.1);
+  border: 2px dashed $color-cyan;
+  color: $text-white; /* 背景が暗いので白文字に */
   width: 100%;
   padding: 16px;
   border-radius: 12px;
@@ -288,7 +305,7 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 
-  &:active { background-color: rgba(18, 84, 165, 0.05); }
+  &:active { background-color: rgba(0, 174, 240, 0.2); }
 }
 
 /* 下部アクションボタン群 */
@@ -298,30 +315,30 @@ body {
   gap: 12px;
   margin-bottom: 50px;
 
-  /* 提出・確認へ進むボタン（グラデーションで高級感と先進感を演出） */
+  /* 提出・確認へ進むボタン（ロゴのシアンカラー） */
   .submit-btn {
-    background: linear-gradient(135deg, $color-primary, $color-primary-light);
-    color: $bg-white;
+    background: linear-gradient(135deg, $color-cyan, $color-cyan-light);
+    color: $text-white;
     border: none;
     padding: 16px;
     border-radius: 50px;
-    font-weight: bold;
+    font-weight: 900;
     font-size: 16px;
-    box-shadow: 0 4px 15px rgba(18, 84, 165, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 174, 240, 0.4); /* シアンの光る影 */
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:active { 
       transform: scale(0.98); 
-      box-shadow: 0 2px 8px rgba(18, 84, 165, 0.2); 
+      box-shadow: 0 2px 8px rgba(0, 174, 240, 0.3); 
     }
   }
 
-  /* 戻るボタン */
+  /* 戻るボタン（暗い背景に映える半透明デザイン） */
   .back-btn {
-    background-color: $bg-white;
-    color: $color-primary;
-    border: 1px solid $color-primary;
+    background-color: transparent;
+    color: $text-white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 16px;
     border-radius: 50px;
     font-weight: bold;
@@ -330,7 +347,7 @@ body {
     transition: all 0.2s ease;
 
     &:active { 
-      background-color: rgba(18, 84, 165, 0.05);
+      background-color: rgba(255, 255, 255, 0.1);
       transform: scale(0.98); 
     }
   }
