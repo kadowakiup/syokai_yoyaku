@@ -1,9 +1,9 @@
 @charset "UTF-8";
 /* ========================================================
-   Variables & Colors (Universal Marketing)
+   Variables & Colors (Universal Marketing Cyan)
    ======================================================== */
 /* ロゴのメインカラー（鮮やかなシアン） */
-/* 名刺から抽出した背景用のディープブルー */
+/* 名刺から抽出したディープブルー（アクセントとして使用） */
 /* カードとテキストの基本色 */
 /* カード内の濃いグレー */
 /* 背景に乗る白文字 */
@@ -14,21 +14,21 @@ body {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
   margin: 0;
   padding: 0;
-  /* 背景を名刺風の深いブルーのグラデーションに */
-  background: linear-gradient(135deg, #0a3d82 0%, #06234d 100%);
+  /* 背景をロゴの鮮やかなシアンに */
+  background-color: #00aef0;
   background-attachment: fixed; /* スクロールしても背景を固定 */
   color: #1a202c;
 }
 
-/* ローディング画面（ダークなガラス風） */
+/* ローディング画面（シアンベースのガラス風） */
 .kousintyu {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(6, 35, 77, 0.85);
-  color: #00aef0;
+  background-color: rgba(0, 174, 240, 0.9);
+  color: #ffffff;
   font-weight: bold;
   font-size: 18px;
   display: flex;
@@ -64,8 +64,8 @@ body {
 }
 .week-selector .nav-btn {
   padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.1); /* 半透明のかっこいいボタン */
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2); /* 背景が明るいので少し白を濃く */
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 50px;
   color: #ffffff;
   font-weight: bold;
@@ -74,12 +74,12 @@ body {
   transition: all 0.2s ease;
 }
 .week-selector .nav-btn:active:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
   transform: scale(0.95);
 }
 .week-selector .nav-btn:disabled {
-  color: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
   background: transparent;
   box-shadow: none;
 }
@@ -99,7 +99,7 @@ body {
   padding: 16px 8px;
   background-color: #ffffff; /* 白いカード */
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   border: none;
   /* ヘッダー部分（日付・曜日） */
 }
@@ -142,16 +142,16 @@ body {
   align-items: center;
   box-sizing: border-box;
   transition: all 0.2s ease;
-  /* 空き枠：ロゴのシアンカラーを強調 */
+  /* 空き枠：名刺のディープブルーを強調色に使用 */
 }
 .calendar-grid .calendar-col .slot.available {
   background-color: #ffffff;
-  border: 2px solid #00aef0;
-  color: #00aef0;
+  border: 2px solid #0a3d82;
+  color: #0a3d82;
   cursor: pointer;
 }
 .calendar-grid .calendar-col .slot.available:active {
-  background-color: #00aef0;
+  background-color: #0a3d82;
   color: #ffffff;
 }
 .calendar-grid .calendar-col .slot {
@@ -175,11 +175,11 @@ body {
   padding: 16px 20px;
   border-radius: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   border: none;
 }
 .form-container .readonly-group label, .confirm-container .readonly-group label {
-  color: #00aef0; /* アクセントにロゴのシアン */
+  color: #0a3d82; /* アクセントにディープブルー */
   font-size: 12px;
   font-weight: bold;
   margin-bottom: 8px;
@@ -204,11 +204,11 @@ body {
   border-radius: 16px;
   padding: 24px !important;
   margin-bottom: 20px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 .form-container .applicant-block h3, .confirm-container .applicant-block h3 {
-  color: #00aef0 !important;
+  color: #0a3d82 !important;
   font-size: 15px !important;
   font-weight: 900;
   margin-bottom: 16px;
@@ -236,9 +236,9 @@ body {
 }
 .form-container .applicant-block input[type=text]:focus, .confirm-container .applicant-block input[type=text]:focus {
   outline: none;
-  border-color: #00aef0;
+  border-color: #0a3d82;
   background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(0, 174, 240, 0.1); /* シアンの淡い発光 */
+  box-shadow: 0 0 0 3px rgba(10, 61, 130, 0.1);
 }
 .form-container .applicant-block, .confirm-container .applicant-block {
   /* 削除ボタン */
@@ -266,7 +266,7 @@ body {
   background-color: #ffffff;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   border: none;
   line-height: 1.8;
   margin-bottom: 24px;
@@ -278,9 +278,9 @@ body {
 
 /* 追加ボタン */
 .add-btn {
-  background-color: rgba(0, 174, 240, 0.1);
-  border: 2px dashed #00aef0;
-  color: #ffffff; /* 背景が暗いので白文字に */
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px dashed #ffffff;
+  color: #ffffff;
   width: 100%;
   padding: 16px;
   border-radius: 12px;
@@ -291,7 +291,7 @@ body {
   transition: all 0.2s;
 }
 .add-btn:active {
-  background-color: rgba(0, 174, 240, 0.2);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* 下部アクションボタン群 */
@@ -300,31 +300,31 @@ body {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 50px;
-  /* 提出・確認へ進むボタン（ロゴのシアンカラー） */
+  /* 提出・確認へ進むボタン（名刺のディープブルーを使用しコントラストをつける） */
 }
 .button-container .submit-btn {
-  background: linear-gradient(135deg, #00aef0, #33beff);
+  background-color: #0a3d82;
   color: #ffffff;
   border: none;
   padding: 16px;
   border-radius: 50px;
   font-weight: 900;
   font-size: 16px;
-  box-shadow: 0 4px 16px rgba(0, 174, 240, 0.4); /* シアンの光る影 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .button-container .submit-btn:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(0, 174, 240, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .button-container {
-  /* 戻るボタン（暗い背景に映える半透明デザイン） */
+  /* 戻るボタン（白文字の半透明デザイン） */
 }
 .button-container .back-btn {
   background-color: transparent;
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   padding: 16px;
   border-radius: 50px;
   font-weight: bold;
@@ -333,6 +333,6 @@ body {
   transition: all 0.2s ease;
 }
 .button-container .back-btn:active {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
   transform: scale(0.98);
 }/*# sourceMappingURL=style.css.map */
