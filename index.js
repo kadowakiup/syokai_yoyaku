@@ -122,11 +122,13 @@ function renderCalendar() {
       const isBooked = bookedSlots[`${dateStr}_${time}`] === true;
       const isAvailable = !isPast && !isBooked;
 
+      // renderCalendar 内の TIME_SLOTS.forEach の中
       const slotBtn = document.createElement("button");
       slotBtn.className = `slot ${isAvailable ? 'available' : 'full'}`;
       
       if (isAvailable) {
-        slotBtn.innerHTML = `<span>${time}</span><span class="mark">〇</span>`;
+        // 〇 を 少し太めの可愛い「よき」マーク風にするか、そのまま〇でデザイン吸収
+        slotBtn.innerHTML = `<span>${time}</span><span class="mark">🩵</span>`; // 水色ハートや〇など
         slotBtn.onclick = () => openForm({ date: dateStr, time: time });
       } else {
         slotBtn.innerHTML = `<span>${time}</span><span class="mark">✕</span>`;

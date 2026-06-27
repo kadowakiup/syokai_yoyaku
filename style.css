@@ -1,201 +1,271 @@
 @charset "UTF-8";
+/* ========================================================
+   Variables & Colors (色と変数の定義)
+   ======================================================== */
+/* ポップで可愛いパステルカラー */
+/* パステルブルー */
+/* ポップピンク */
+/* カレンダーの曜日・枠用カラー */
+/* ★エラー修正: 薄いブルーグレー */
+/* ========================================================
+   Base Styles (基本設定)
+   ======================================================== */
 body {
   font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans", sans-serif;
-  color: #333;
+  color: #333333;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
+  background-color: #fffbf5;
 }
 
+/* ローディング画面 */
 .kousintyu {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #01b6ff;
-  font-weight: 600;
-  font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #ff6b8b;
+  font-weight: 800;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
+/* タイトル（リボン・マーカー風） */
 .title {
   text-align: center;
-  font-size: 18px;
-  padding: 18px 0;
-  background-color: #fff;
-  margin: 0 0 15px 0;
-  border-bottom: 1px solid #ddd;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 24px 0;
+  background-color: #ffffff;
+  margin: 0 0 20px 0;
+  border-bottom: 3px solid #f0e6d2;
+  color: #222222;
 }
 
-/* カレンダー周り */
+/* ========================================================
+   Calendar View (カレンダー画面)
+   ======================================================== */
 .week-selector {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px 15px;
-  font-weight: bold;
+  padding: 0 16px 16px;
+  font-weight: 800;
+  font-size: 15px;
 }
-
-.nav-btn {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  background: #fff;
-  border-radius: 4px;
+.week-selector .nav-btn {
+  padding: 8px 16px;
+  border: 2px solid #333333;
+  background: #ffffff;
+  border-radius: 20px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 #333333;
+  transition: all 0.1s;
+  cursor: pointer;
 }
-
-.nav-btn:disabled {
-  color: #ccc;
+.week-selector .nav-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 #333333;
 }
-
-/* カレンダーのヘッダー（日付・曜日を1行で表示） */
-.calendar-header {
-  text-align: center;
-  margin-bottom: 12px;
-  white-space: nowrap; /* 画面幅によって途中で自動改行されるのを防ぐ */
-}
-
-/* 日付（◯日）の数字部分 */
-.calendar-header .day-num {
-  font-size: 12px; /* 横並びにするため少しコンパクトに */
-  font-weight: 600;
-  color: #333;
-}
-
-/* 曜日（ (月) など ）のテキスト部分 */
-.calendar-header .day-name {
-  font-size: 11px;
-  color: #999;
-  font-weight: normal;
-  margin-left: 2px; /* ★ 日付と曜日の間に少しだけ隙間を空ける */
-}
-
-/* 土曜日の曜日の色 */
-.calendar-header .day-name.sat {
-  color: #6bbdff;
-}
-
-/* 日曜日の曜日の色 */
-.calendar-header .day-name.sun {
-  color: #ff8cae;
+.week-selector .nav-btn:disabled {
+  color: #cccccc;
+  border-color: #cccccc;
+  box-shadow: none;
 }
 
 .calendar-grid {
   display: flex;
   overflow-x: auto;
-  padding: 0 10px;
-  gap: 5px;
+  padding: 0 12px 20px;
+  gap: 8px;
+  -webkit-overflow-scrolling: touch; /* スマホでの横スクロールを滑らかに */
 }
-
-/* カレンダーの枠デザイン調整 */
-.calendar-col {
-  min-width: 85px; /* 少し幅を広げる */
+.calendar-grid .calendar-col {
+  min-width: 88px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #ffffff;
+  padding: 8px 4px;
+  border-radius: 24px;
+  border: 2px solid #eedec4;
+  /* ヘッダー部分（日付・曜日） */
 }
-
-.slot {
-  width: 100%;
-  padding: 8px 6px; /* 高さを少しコンパクトに */
-  margin-bottom: 6px;
-  border-radius: 4px;
-  border: none;
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between; /* 時間と〇✕を左右に分ける */
-  align-items: center;
+.calendar-grid .calendar-col .calendar-header {
+  text-align: center;
+  margin-bottom: 12px;
+  white-space: nowrap;
 }
-
-.slot .mark {
-  font-weight: bold;
-}
-
-.slot.available {
-  background-color: #e0f7fa;
-  color: #00838f;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.slot.full {
-  background-color: #f2f2f2;
-  color: #b0b0b0;
-}
-
-.slot.empty {
-  background: none;
-  color: #ccc;
+.calendar-grid .calendar-col .calendar-header .day-num {
   font-size: 12px;
+  font-weight: 800;
+  color: #333333;
 }
-
-/* フォーム・確認画面周り */
-.form-container, .confirm-container {
-  padding: 0 20px;
+.calendar-grid .calendar-col .calendar-header .day-name {
+  font-size: 11px;
+  color: #999999;
+  font-weight: normal;
+  margin-left: 2px;
 }
-
-.form-group, .applicant-group {
-  margin-bottom: 15px;
+.calendar-grid .calendar-col .calendar-header .day-name.sat {
+  color: #6bbdff;
+  font-weight: 800;
 }
-
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-  font-weight: 600;
+.calendar-grid .calendar-col .calendar-header .day-name.sun {
+  color: #ff8cae;
+  font-weight: 800;
 }
-
-input[type=text] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.calendar-grid .calendar-col {
+  /* 予約枠ボタン */
+}
+.calendar-grid .calendar-col .slot {
+  width: 90%;
+  padding: 10px 6px;
+  margin-bottom: 8px;
+  border-radius: 18px;
+  border: 2px solid #333333;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   box-sizing: border-box;
+  transition: all 0.1s;
+}
+.calendar-grid .calendar-col .slot .mark {
+  font-size: 14px;
+}
+.calendar-grid .calendar-col .slot {
+  /* 空き枠 */
+}
+.calendar-grid .calendar-col .slot.available {
+  background-color: #e8faff;
+  color: #007fa9;
+  border-color: #01b6ff;
+  box-shadow: 0 3px 0 #01b6ff;
+  cursor: pointer;
+}
+.calendar-grid .calendar-col .slot.available:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 #01b6ff;
+}
+.calendar-grid .calendar-col .slot {
+  /* 満席枠 */
+}
+.calendar-grid .calendar-col .slot.full {
+  background-color: #f5f5f5;
+  color: #bbb;
+  border-color: #dddddd;
+  box-shadow: none;
 }
 
-.readonly-group input {
-  background-color: #f0f0f0;
-  color: #666;
+/* ========================================================
+   Form & Confirm View (フォーム・確認画面)
+   ======================================================== */
+.form-container, .confirm-container {
+  padding: 0 24px;
 }
-
-.add-btn {
-  background: none;
-  border: 1px dashed #01b6ff;
-  color: #01b6ff;
+.form-container .form-group, .form-container .applicant-block, .confirm-container .form-group, .confirm-container .applicant-block {
+  margin-bottom: 20px;
+}
+.form-container label, .confirm-container label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 800;
+  color: #555555;
+}
+.form-container input[type=text], .confirm-container input[type=text] {
   width: 100%;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 12px;
+  border: 2px solid #333333;
+  border-radius: 16px;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #ffffff;
+}
+.form-container input[type=text]:focus, .confirm-container input[type=text]:focus {
+  outline: none;
+  border-color: #01b6ff;
+}
+.form-container, .confirm-container {
+  /* 編集不可（予約日時・紹介者） */
+}
+.form-container .readonly-group input, .confirm-container .readonly-group input {
+  background-color: #f0f4f8;
+  border-color: #bbbbbb;
+  color: #777777;
+}
+.form-container, .confirm-container {
+  /* 応募者情報ブロック（ぷっくりカード風） */
+}
+.form-container .applicant-block, .confirm-container .applicant-block {
+  background: #ffffff;
+  border: 2px solid #eedec4 !important;
+  border-radius: 20px;
+  padding: 16px !important;
+  box-shadow: 0 4px 0 #eedec4;
+  position: relative;
+}
+
+/* 追加ボタン（破線） */
+.add-btn {
+  background-color: #ffffff;
+  border: 2px dashed #ff6b8b;
+  color: #ff6b8b;
+  width: 100%;
+  padding: 12px;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 14px;
   margin-bottom: 30px;
   cursor: pointer;
 }
 
-/* ボタン共通 */
+/* 下部アクションボタン群 */
 .button-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 40px;
+  gap: 12px;
+  margin-bottom: 50px;
+  /* 提出・確認へ進むボタン */
 }
-
-.submit-btn {
-  background-color: #01b6ff;
-  color: #fff;
-  border: none;
-  padding: 14px;
-  border-radius: 4px;
-  font-weight: bold;
+.button-container .submit-btn {
+  background-color: #ff6b8b;
+  color: #ffffff;
+  border: 2px solid #333333;
+  padding: 16px;
+  border-radius: 50px;
+  font-weight: 800;
   font-size: 16px;
+  box-shadow: 0 4px 0 #333333;
+  cursor: pointer;
 }
-
-.back-btn {
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #ccc;
-  padding: 14px;
-  border-radius: 4px;
-  font-weight: bold;
+.button-container .submit-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #333333;
+}
+.button-container {
+  /* 戻るボタン */
+}
+.button-container .back-btn {
+  background-color: #ffffff;
+  color: #333333;
+  border: 2px solid #333333;
+  padding: 16px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 4px 0 #333333;
+  cursor: pointer;
+}
+.button-container .back-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #333333;
 }/*# sourceMappingURL=style.css.map */
